@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0"
+      prefWidth="1200.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller">
+    <Pane fx:id="pane" prefHeight="110.0" prefWidth="1200.0">
+        <DatePicker fx:id="checkInDatePicker" layoutX="390.0" layoutY="30.0" prefHeight="30.0" prefWidth="200.0"/>
+        <DatePicker fx:id="checkOutDatePicker" layoutX="610.0" layoutY="30.0" prefHeight="30.0" prefWidth="200.0"/>
+
+        <Label layoutX="410.0" layoutY="10.0" text="Check-in date picker"/>
+        <Label layoutX="630.0" layoutY="10.0" text="Check-out date picker"/>
+
+        <Button layoutX="550.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#search" prefWidth="100.0"
+                text="Search"/>
+        <Button layoutX="670.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#clear" prefWidth="100.0"
+                text="Clear"/>
+        <Button fx:id="refresh" layoutX="430.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#refresh"
+                prefWidth="100.0" text="Refresh"/>
+
+        <CheckBox fx:id="withMag" layoutX="100.0" layoutY="45.0" mnemonicParsing="false"
+                  text="Search with magnitude"/>
+        <CheckBox fx:id="withPlate" layoutX="100.0" layoutY="10.0" mnemonicParsing="false"
+                  text="Search with tectonic plates"/>
+
+        <Label fx:id="magLabel" layoutX="1080.0" layoutY="70.0" text="magnitude"/>
+
+        <Slider fx:id="magSlider" blockIncrement="0.1" layoutX="900.0" layoutY="70.0" max="7.0" min="1.0"
+                onMouseDragged="#changeText" prefWidth="150.0"/>
+
+        <ComboBox fx:id="plates" layoutX="900.0" layoutY="30.0" prefWidth="150.0" promptText="Tectonic plates"/>
+        <CheckBox fx:id="withTime" layoutX="100.0" layoutY="80.0" mnemonicParsing="false" text="Search with time"/>
+    </Pane>
+    <TabPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1200.0"
+             tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Table">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <TableView fx:id="quakeTable" editable="true" maxHeight="246.0" minHeight="-Infinity"
+                           minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0"
+                           AnchorPane.leftAnchor="-0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                        <TableColumn fx:id="idCol" prefWidth="78.00" text="id"/>
+                        <TableColumn fx:id="UTC_dateCol" minWidth="184.0" prefWidth="200.0"
+                                     text="UTC_date"/>
+                        <TableColumn fx:id="longitudeCol" prefWidth="89.0" text="longitude"/>
+                        <TableColumn fx:id="latitudeCol" prefWidth="91.0" text="latitude"/>
+                        <TableColumn fx:id="depthCol" prefWidth="108.0" text="depth"/>
+                        <TableColumn fx:id="magnitudeCol" prefWidth="108.0" text="magnitude"/>
+                        <TableColumn fx:id="regionCol" minWidth="186.0" prefWidth="320.0" text="region"/>
+                        <TableColumn fx:id="areaCol" minWidth="150.0" prefWidth="183.0" text="area"/>
+                    </columns>
+                </TableView>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Image">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <StackPane prefHeight="500.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <!--2392 * 1190-->
+                    <ImageView fx:id="quakeImage" fitHeight="547.240802676" fitWidth="1100.0"
+                               pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                        <StackPane.margin>
+                            <Insets/>
+                        </StackPane.margin>
+                        <Image url="@./map.gif"/>
+                    </ImageView>
+                    <Canvas fx:id="canvas" height="547.240802676" width="1100.0"
+                            StackPane.alignment="CENTER"/>
+                </StackPane>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Chart By Magnitude">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <BarChart fx:id="magChart" layoutX="250.0" layoutY="50.0" prefHeight="600.0"
+                          prefWidth="1100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0"
+                          AnchorPane.topAnchor="10.0">
+                    <xAxis>
+                        <CategoryAxis fx:id="magAxis" side="BOTTOM"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="magNumAxis" side="LEFT"/>
+                    </yAxis>
+                </BarChart>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Chart By Area">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <LineChart fx:id="areaChart" layoutX="250.0" layoutY="50.0" prefHeight="600.0"
+                           prefWidth="1100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0"
+                           AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0">
+                    <xAxis>
+                        <CategoryAxis fx:id="areaAxis" side="BOTTOM"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="areaNumAxis" side="LEFT"/>
+                    </yAxis>
+                </LineChart>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Chart By Season">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <PieChart fx:id="seasonChart" layoutX="250.0" layoutY="50.0" prefHeight="600.0"
+                          prefWidth="1100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0"
+                          AnchorPane.topAnchor="10.0"/>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
+</VBox>
