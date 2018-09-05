@@ -1,0 +1,14 @@
+
+# macOS
+.DS_Store
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# db.property
+db.properties
